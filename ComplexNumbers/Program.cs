@@ -16,6 +16,7 @@ namespace ComplexNumbers
 
             Console.WriteLine(c1.Abs());
             Console.WriteLine(c1.Phase());
+            Console.WriteLine(c1.Pow(5));
         }
     }
 }

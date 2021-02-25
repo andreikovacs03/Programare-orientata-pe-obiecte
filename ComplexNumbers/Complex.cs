@@ -34,7 +34,17 @@ namespace ComplexNumbers
         public Complex Multiply(Complex number)
         {
             return new Complex(real * number.real - imaginary * number.imaginary,
-                               real * number.imaginary - imaginary * number.real);
+                               real * number.imaginary + imaginary * number.real);
+        }
+
+        public Complex Pow(uint n)
+        {
+            var result = this;
+
+            while (--n > 0)
+                result = result.Multiply(this);
+
+            return result;
         }
 
         public double Abs()
