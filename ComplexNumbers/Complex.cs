@@ -56,5 +56,12 @@ namespace ComplexNumbers
         {
             return Math.Atan2(imaginary, real);
         }
+
+        public static Complex operator +(Complex c1, Complex c2) => c1.Add(c2);
+
+        public static Complex operator -(Complex c1, Complex c2) => c1.Subtract(c2);
+
+        public static Complex operator *(Complex c1, Complex c2) => c1.Multiply(c2);
+
     }
 }
