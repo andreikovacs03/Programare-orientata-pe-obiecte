@@ -13,20 +13,14 @@ namespace Big_Ball_Game
 
         //static System.Drawing.Graphics gfx;
 
-        static RegularBall[] RegularBalls = new RegularBall[RegularBall.Count];
 
-        public static void Initialize(Size CanvasSize)
+        public static void Initialize(Size FormSize)
         {
-            MAX_WIDTH = 800;
-            MAX_HEIGHT = 600;
-            InitializeRegularBalls();
+            MAX_WIDTH = FormSize.Width;
+            MAX_HEIGHT = FormSize.Height;
+            RegularBall.InitializeBalls();
         }
 
-        static void InitializeRegularBalls()
-        {
-            for (int i = 0; i < RegularBalls.Length; i++)
-                RegularBalls[i] = new RegularBall();
-        }
 
         public static void Clear(System.Drawing.Graphics gfx) => gfx.Clear(Color.White);
 
@@ -37,7 +31,7 @@ namespace Big_Ball_Game
 
         public static void DrawRegularBalls(System.Drawing.Graphics gfx)
         {
-            foreach (var ball in RegularBalls)
+            foreach (var ball in RegularBall.Balls)
                 ball.Draw(gfx);
         }
 
@@ -48,18 +42,36 @@ namespace Big_Ball_Game
 
         static void MoveRegularBalls()
         {
-            foreach (var ball in RegularBalls)
-                ball.Movement();
+            foreach (var ball in RegularBall.Balls)
+                ball.Move();
         }
 
-        static void CollisionAllBalls()
+        public static void CollisionAllBalls()
         {
             CollisionRegularBalls();
         }
 
         static void CollisionRegularBalls()
         {
+            for (int i = 0; i < RegularBall.Balls.Count - 1; i++)
+            {
+                for (int j = i + 1; j < RegularBall.Balls.Count; j++)
 
+                    if (RegularBall.Balls[i].IntersectsWith(RegularBall.Balls[j]))
+                    {
+                        if (RegularBall.Balls[i].Radius > RegularBall.Balls[j].Radius)
+                            RegularBall.Balls[i].Eats(RegularBall.Balls[j]);
+                        else
+                        {
+                            RegularBall.Balls[j].Eats(RegularBall.Balls[i]);
+                            j--;
+                        }
+                    }
+
+                RegularBall.Balls[i].OutOfBoundsFix();
+            }
+
+            RegularBall.Balls[RegularBall.Balls.Count - 1].OutOfBoundsFix();
         }
     }
 }
