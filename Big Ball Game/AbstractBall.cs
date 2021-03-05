@@ -26,7 +26,7 @@ namespace Big_Ball_Game
 
         protected static float BallGrowth { get; set; }
         protected static float BallGrowthSpeed { get => 1f; }
-
+        
         public static List<T> Balls = new List<T>();
 
         protected static Random rnd = new Random();
