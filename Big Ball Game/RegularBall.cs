@@ -15,7 +15,7 @@ namespace Big_Ball_Game
             for (int i = 0; i < Count; i++)
                 Balls.Add(new RegularBall());
         } 
-
+         
         public override void Eats(RegularBall ball)
         {
             BallGrowth += ball.Radius;
