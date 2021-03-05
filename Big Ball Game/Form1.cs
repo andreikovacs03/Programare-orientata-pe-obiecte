@@ -17,15 +17,9 @@ namespace Big_Ball_Game
             InitializeComponent();
         }
 
-        private void Form1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         private void FPS_Tick(object sender, EventArgs e)
         {
             Graphics.MoveAllBalls();
-            Graphics.CollisionAllBalls();
             Canvas.Refresh();
         }
 
@@ -38,7 +32,8 @@ namespace Big_Ball_Game
         private void Canvas_Paint(object sender, PaintEventArgs e)
         {
             Graphics.DrawAllBalls(e.Graphics);
-            //e.Graphics.FillEllipse(new SolidBrush(Color.Black), ClientSize.Width - 50, ClientSize.Height - 50, 100, 100);
+            //e.Graphics.FillEllipse(new SolidBrush(Color.Red), 400, 400, 400, 400);
+            //e.Graphics.FillEllipse(new SolidBrush(Color.Green), 350, 450, 400, 400);
         }
     }
 }
