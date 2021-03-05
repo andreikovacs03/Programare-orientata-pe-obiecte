@@ -12,7 +12,7 @@ namespace Big_Ball_Game
 
         public virtual float DX { get; set; }
         public virtual float DY { get; set; }
-
+         
         protected float RADIUS_MIN { get => 2.5f; }
         protected float RADIUS_MAX { get => 4f; }
         protected float Speed { get; set; }
