@@ -19,14 +19,15 @@ namespace Big_Ball_Game
             MAX_WIDTH = FormSize.Width;
             MAX_HEIGHT = FormSize.Height;
             RegularBall.InitializeBalls();
+            MonsterBall.InitializeBalls();
+            RepellentBall.InitializeBalls();
         }
-
-
-        public static void Clear(System.Drawing.Graphics gfx) => gfx.Clear(Color.White);
 
         public static void DrawAllBalls(System.Drawing.Graphics gfx)
         {
             DrawRegularBalls(gfx);
+            DrawMonsterBalls(gfx);
+            DrawRepelentBalls(gfx);
         }
 
         public static void DrawRegularBalls(System.Drawing.Graphics gfx)
@@ -35,9 +36,25 @@ namespace Big_Ball_Game
                 ball.Draw(gfx);
         }
 
+        public static void DrawMonsterBalls(System.Drawing.Graphics gfx)
+        {
+            foreach (var ball in MonsterBall.Balls)
+                ball.Draw(gfx);
+        }
+
+        public static void DrawRepelentBalls(System.Drawing.Graphics gfx)
+        {
+            foreach (var ball in RepellentBall.Balls)
+                ball.Draw(gfx);
+        }
+
         public static void MoveAllBalls()
         {
             MoveRegularBalls();
+            MoveRepelentBalls();
+
+            CollisionAllBalls();
+            OutOfBoundsFixAllBalls();
         }
 
         static void MoveRegularBalls()
@@ -46,32 +63,26 @@ namespace Big_Ball_Game
                 ball.Move();
         }
 
-        public static void CollisionAllBalls()
+        static void MoveRepelentBalls()
         {
-            CollisionRegularBalls();
+            foreach (var ball in RepellentBall.Balls)
+                ball.Move();
         }
 
-        static void CollisionRegularBalls()
+        public static void CollisionAllBalls()
         {
-            for (int i = 0; i < RegularBall.Balls.Count - 1; i++)
-            {
-                for (int j = i + 1; j < RegularBall.Balls.Count; j++)
+            RegularBall.CollisionWith(RegularBall.Balls);
+            RegularBall.CollisionWith(MonsterBall.Balls);
+            //RegularBall.CollisionWith(RepellentBall.Balls);
 
-                    if (RegularBall.Balls[i].IntersectsWith(RegularBall.Balls[j]))
-                    {
-                        if (RegularBall.Balls[i].Radius > RegularBall.Balls[j].Radius)
-                            RegularBall.Balls[i].Eats(RegularBall.Balls[j]);
-                        else
-                        {
-                            RegularBall.Balls[j].Eats(RegularBall.Balls[i]);
-                            j--;
-                        }
-                    }
+            //RepellentBall.CollisionWith(RepellentBall.Balls);
+        }
 
-                RegularBall.Balls[i].OutOfBoundsFix();
-            }
-
-            RegularBall.Balls[RegularBall.Balls.Count - 1].OutOfBoundsFix();
+        static void OutOfBoundsFixAllBalls()
+        {
+            RegularBall.OutOfBoundsFixBalls();
+            MonsterBall.OutOfBoundsFixBalls();
+            //RepellentBall.OutOfBoundsFixBalls();
         }
     }
 }
