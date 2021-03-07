@@ -1,54 +1,49 @@
 ﻿using System;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Big_Ball_Game
 {
-    abstract class AbstractBall<T>
+    internal abstract class AbstractBall<T> : IBall where T : new()
     {
-        public float Radius { get; set; }
+        public static int Count { get; }
         public float X { get; set; }
         public float Y { get; set; }
 
-        public virtual float DX { get; set; }
-        public virtual float DY { get; set; }
+        public virtual float DX { get; set; } = new[] { -10, Graphics.MAX_WIDTH + 10 }[Rnd.Next(2)];
+        public virtual float DY { get; set; } = new[] { -10, Graphics.MAX_HEIGHT + 10 }[Rnd.Next(2)];
 
-        protected float RADIUS_MIN { get => 2.5f; }
-        protected float RADIUS_MAX { get => 4f; }
+        public float Radius { get; set; }
+        protected float RADIUS_MIN => 2.5f;
+        protected float RADIUS_MAX => 4f;
         protected float Speed { get; set; }
 
-        protected static float SPEED_MIN { get => 1.5f; }
-        protected static float SPEED_MAX { get => 5.5f; }
+        protected static float SPEED_MIN => 1.5f;
+        protected static float SPEED_MAX => 5.5f;
 
-        public virtual Color Color { get; set; }
-        protected static Color OutlineColor { get => Color.Black; }
-        protected static float OutlineWidth { get => 1.5f; }
+        public virtual Color Color { get; set; } = Color.FromArgb(Rnd.Next(256), Rnd.Next(256), Rnd.Next(256));
+        protected static Color OutlineColor => Color.Black;
+        protected static float OutlineWidth => 1.5f;
 
-        protected static float BallGrowth { get; set; }
-        protected static float BallGrowthSpeed { get => 1f; }
+        protected float BallGrowth { get; set; }
+        protected static float BallGrowthSpeed => 0.3f;
 
         public static List<T> Balls = new List<T>();
 
-        protected static Random rnd = new Random();
+        protected static Random Rnd = new Random();
 
-        public static float RandomFloat(float min, float max)
+        private static float RandomFloat(float min, float max) =>
+            (float)(Rnd.NextDouble() * (max - min) + min);
+
+        protected AbstractBall()
         {
-            return (float)(new Random().NextDouble() * (max - min) + min);
-        }
-
-        public AbstractBall()
-        {
-            Radius = RandomFloat(RADIUS_MIN, RADIUS_MAX);
-
             X = RandomFloat(Radius, Graphics.MAX_WIDTH - Radius);
             Y = RandomFloat(Radius, Graphics.MAX_HEIGHT - Radius);
 
-            DX = new int[] { -1, Graphics.MAX_WIDTH + 1 }[rnd.Next(2)];
-            DY = new int[] { -1, Graphics.MAX_HEIGHT + 1 }[rnd.Next(2)];
+            Radius = RandomFloat(RADIUS_MIN, RADIUS_MAX);
 
             Speed = RandomFloat(SPEED_MIN, SPEED_MAX);
-
-            Color = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
         }
 
         public void Draw(System.Drawing.Graphics gfx)
@@ -63,8 +58,13 @@ namespace Big_Ball_Game
             gfx.DrawEllipse(new Pen(OutlineColor, OutlineWidth), X - Radius, Y - Radius, 2 * Radius, 2 * Radius);
         }
 
+        public static void DrawBalls(System.Drawing.Graphics gfx)
+        {
+            foreach (var ball in Balls.Cast<IBall>())
+                ball.Draw(gfx);
+        }
 
-        virtual public void OutOfBoundsFix()
+        public virtual void OutOfBoundsFix()
         {
             if (X <= Radius)
             {
@@ -104,24 +104,25 @@ namespace Big_Ball_Game
                 Y -= Speed;
         }
 
-        public bool IntersectsWith(RegularBall ball) =>
-               Math.Sqrt((X - ball.X) * (X - ball.X) + (Y - ball.Y) * (Y - ball.Y))
-               - Radius - ball.Radius
-               < 0;
+        public static void MoveBalls()
+        {
+            foreach (var ball in Balls.Cast<IBall>())
+                ball.Move();
+        }
 
-        public bool IntersectsWith(MonsterBall ball) =>
-               Math.Sqrt((X - ball.X) * (X - ball.X) + (Y - ball.Y) * (Y - ball.Y))
-               - Radius - ball.Radius
-               < 0;
+        public static void OutOfBoundsFixBalls()
+        {
+            foreach (var ball in Balls.Cast<IBall>())
+                ball.OutOfBoundsFix();
+        }
 
-        public bool IntersectsWith(RepellentBall ball) =>
-               Math.Sqrt((X - ball.X) * (X - ball.X) + (Y - ball.Y) * (Y - ball.Y))
-               - Radius - ball.Radius
-               < 0;
+        public bool IntersectsWith(IBall ball) =>
+            Math.Sqrt((X - ball.X) * (X - ball.X) + (Y - ball.Y) * (Y - ball.Y))
+            - Radius - ball.Radius
+            < 0;
 
         public abstract void Eats(RegularBall ball);
         public abstract void Eats(MonsterBall ball);
         public abstract void Eats(RepellentBall ball);
-
     }
 }

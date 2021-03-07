@@ -1,35 +1,15 @@
-﻿using System;
-using System.Drawing;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Big_Ball_Game
 {
-    class RegularBall : AbstractBall<RegularBall>
+    internal class RegularBall : AbstractBall<RegularBall>
     {
-        public static int Count { get => 150; }
-
-        public RegularBall() : base() { }
+        public new static int Count => 150;
 
         public static void InitializeBalls()
         {
             for (int i = 0; i < Count; i++)
                 Balls.Add(new RegularBall());
-        }
-
-        public override void Eats(RegularBall ball)
-        {
-            BallGrowth += ball.Radius;
-            OutOfBoundsFix();
-            Balls.Remove(ball);
-        }
-
-        public override void Eats(MonsterBall ball) => ball.Eats(this);
-        public override void Eats(RepellentBall ball) => ball.Eats(this);
-
-        public static void OutOfBoundsFixBalls()
-        {
-            foreach (var ball in Balls)
-                ball.OutOfBoundsFix();
         }
 
         public static void CollisionWith(List<RegularBall> regularBalls)
@@ -58,12 +38,22 @@ namespace Big_Ball_Game
                     }
         }
 
-        public static void CollisionWith(List<RepellentBall> repelentBalls)
+        public static void CollisionWith(List<RepellentBall> repellentBalls)
         {
             for (int i = 0; i < Balls.Count; i++)
-                for (int j = 0; j < repelentBalls.Count; j++)
-                    if (Balls[i].IntersectsWith(repelentBalls[j]))
-                        repelentBalls[j].Eats(Balls[i]);
+                for (int j = 0; j < repellentBalls.Count; j++)
+                    if (Balls[i].IntersectsWith(repellentBalls[j]))
+                        repellentBalls[j].Eats(Balls[i]);
         }
+        
+        public override void Eats(RegularBall ball)
+        {
+            BallGrowth += ball.Radius;
+            OutOfBoundsFix();
+            Balls.Remove(ball);
+        }
+
+        public override void Eats(MonsterBall ball) => ball.Eats(this);
+        public override void Eats(RepellentBall ball) => ball.Eats(this);
     }
 }
