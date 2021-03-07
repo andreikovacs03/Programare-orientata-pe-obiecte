@@ -1,0 +1,64 @@
+BBG - Big Ball Game
+Scrieți un program C# care să simuleze un sistem format din mai multe bile care se află pe un  canvas (o zona dreptunghiulară cu dimensiune fixă stabilită de la început).  
+
+Bilele sunt de mai multe tipuri:
+
+1.      Regular ball
+
+2.      Monster ball (blackhole ball)
+
+3.      Repelent ball
+
+Numărul de bile de fiecare tip sunt parametri ai sistemului.
+
+Fiecare bilă are următoarele caracteristici:
+
+·         Rază – stabilită aleator la inițializarea sistemului.
+
+·         Poziție – stabilită aleator la inițializarea sistemului.
+
+·         Culoare - stabilită aleator la inițializarea sistemului prin RGB (trei valori numerice cuprinse între 0 si 255 care reprezintă componentele Red, Green și Blue)
+
+·         Direcție, sens și viteză de deplasare – stabilite aleator la inițializarea sistemului prin două valori numerice dx și dy. (Pentru monster ball dx și dy sunt egale cu zero și nu se modifică)
+
+Bilele vor intra în coliziune la un moment dat. Coliziunea a două bile va avea efecte diferite în funcție de tipul lor.
+
+1.      Regular ball cu regular ball – bila mai mare o înghite pe cea mai mică, bila mică dispare din sistem, raza bilei mari crește cu raza bilei mici, culoarea bilei mari se schimbă prin combinarea culorilor celor două bile proporțional cu dimensiunea lor (combinarea culorilor se face separat pe fiecare componentă RGB).
+
+2.      Regular ball cu monster ball – regular ball va dispărea din sistem. Raza lui Monster ball crește cu raza bilei înghițite.
+
+3.      Regular ball cu repelent ball – repelent ball preia culoarea lui regular ball. Regular ball își schimbă sensul de deplasare (în sens opus) și își păstrează direcția și viteza.
+
+4.      Repelent  ball cu repelent ball – își vor interschimba culorile, restul proprietăților rămân nemodificate.
+
+5.      Repelent  ball cu monster ball – raza lui repelent ball se înjumătățește.
+
+6.      Monster ball cu monster ball – nu se poate întâmpla, ele au poziție fixă și se va garanta la inițializarea sistemului ca nu au aceeași poziție.
+
+Bilele pot intra în coliziune și cu marginile canvasului, situație în care ele vor ricoșa înapoi în canvas prin reflexie.
+
+ 
+
+Sistemul va fi simulat printr-o secvență de forma:
+
+while(!finished)
+
+{
+
+   Turn();
+
+Delay();
+
+}
+
+Precizări suplimentare:
+
+·         Simularea se încheie când toate bilele de tip regular au fost înghițite.
+
+·         Dacă e cazul trebuie detectată și situația în care una sau mai multe bile de tip regular nu pot fi înghițite – situație în care simularea se consideră încheiată (opțional).
+
+·         Se poate crea o interfață grafică utilizator care să prezinte vizual sistemul (opțional).
+
+ 
+
+ 
